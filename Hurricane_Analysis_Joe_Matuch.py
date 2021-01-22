@@ -14,8 +14,8 @@ damages = ['Damages not recorded', '100M', 'Damages not recorded', '40M', '27.9M
 deaths = [90,4000,16,3103,179,184,408,682,5,1023,43,319,688,259,37,11,2068,269,318,107,65,19325,51,124,17,1836,125,87,45,133,603,138,3057,74]
 
 # write your update damages function here:
-updated_damages = []
 def update_damages(damages):
+    updated_damages = []
     for item in damages:
         if item == 'Damages not recorded':
             updated_damages.append(item)
@@ -23,115 +23,121 @@ def update_damages(damages):
             updated_damages.append(1000000000*float(item.strip('B')))
         else:
             updated_damages.append(1000000*float(item.strip('M')))
-
     return updated_damages
-print(update_damages(damages))
 
 # write your construct hurricane dictionary function here:
-hurricanes = {}
-for i in range(len(names)):
-    hurricanes[names[i]] = {'Name':names[i], 'Month':months[i], 'Year':years[i], 'Max Sustained Wind':max_sustained_winds[i], 'Areas Affected':areas_affected[i], 'Damage':updated_damages[i], 'Death':deaths[i]}
-print(hurricanes['Tampico']['Damage'])
-print(len(hurricanes))
+def hurricane_dictionary(names, months, years, max_sustained_winds, areas_affected, updated_damages, deaths):
+    hurricanes = {}
+    for i in range(len(names)):
+        hurricanes[names[i]] = {'Name':names[i], 'Month':months[i], 'Year':years[i], 'Max Sustained Wind':max_sustained_winds[i], 'Areas Affected':areas_affected[i], 'Damage':updated_damages[i], 'Death':deaths[i]}
+    return hurricanes
 
 # write your construct hurricane by year dictionary function here:
-hurricanes_by_year = {}
-for keys,values in hurricanes.items():
-    current_year = values['Year']
-    current_cane = values
-    if hurricanes_by_year.get(current_year):
-        hurricanes_by_year[current_year].append(values)
-    else:
-        hurricanes_by_year[current_year] = [current_cane]
+def hurricanes_by_year(hurricanes):
+    hurricanes_by_year = {}
+    for keys,values in hurricanes.items():
+        current_year = values['Year']
+        current_cane = values
+        if hurricanes_by_year.get(current_year):
+            hurricanes_by_year[current_year].append(values)
+        else:
+            hurricanes_by_year[current_year] = [current_cane]
+     return hurricanes_by_year
 
 # write your count affected areas function here:
-areas_affected_count = {}
-for item in areas_affected:
-    for place in item:
-        if place in areas_affected_count:
-            areas_affected_count[place] += 1
-        else:
-            areas_affected_count[place] = 1
-print(areas_affected_count)
+def areas_affected_count(areas_affected):
+    areas_affected_count = {}
+    for item in areas_affected:
+        for place in item:
+            if place in areas_affected_count:
+                areas_affected_count[place] += 1
+            else:
+                areas_affected_count[place] = 1
+    return areas_affected_count
 
 # write your find most affected area function here:
-most_affected_area = {}
-count = 0
-for key,value in areas_affected_count.items():    
-    if value > count:
-        count = value
-        most_affected_area = {}
-        most_affected_area[key] = value
-    elif value == count:
-        most_affected_area.update({key:value})
-    else:
-        continue
-print(most_affected_area)
+def most_affected_area(areas_affected_count):
+    most_affected_area = {}
+    count = 0
+    for key,value in areas_affected_count.items():    
+        if value > count:
+            count = value
+            most_affected_area = {}
+            most_affected_area[key] = value
+        elif value == count:
+            most_affected_area.update({key:value})
+        else:
+            continue
+    return most_affected_area
 
 # write your greatest number of deaths function here:
-most_deaths = 0
-most_deaths_hurricane = []
-for i in range(len(deaths)):
-    if deaths[i] > most_deaths:
-        most_deaths = deaths[i]
-        most_deaths_hurricane = []
-        most_deaths_hurricane.append(names[i])
-    elif deaths[i] == most_deaths:
-        most_deaths_hurricane.append(names[i])
-    else:
-        continue
-most_deaths_result = {most_deaths: most_deaths_hurricane}
-print(most_deaths_result)
+def most_deaths(deaths, names):
+    most_deaths = 0
+    most_deaths_hurricane = []
+    for i in range(len(deaths)):
+        if deaths[i] > most_deaths:
+            most_deaths = deaths[i]
+            most_deaths_hurricane = []
+            most_deaths_hurricane.append(names[i])
+        elif deaths[i] == most_deaths:
+            most_deaths_hurricane.append(names[i])
+        else:
+            continue
+    most_deaths_result = {most_deaths: most_deaths_hurricane}
+    return most_deaths_result
 
 # write your catgeorize by mortality function here:
-mortality_scale = {0: 0, 1: 100, 2: 500, 3: 1000, 4: 10000}
-mortality_rates = {0:[], 1:[], 2:[], 3:[], 4:[]}
-for keys,values in hurricanes.items():
-    current_deaths = values['Death']
-    current_cane = values
-    if current_deaths > 10000:
-        mortality_rates[4].append(values)
-    elif current_deaths > 1000:
-        mortality_rates[3].append(values)
-    elif current_deaths > 500:
-        mortality_rates[2].append(values)
-    elif current_deaths > 100:
-        mortality_rates[1].append(values)
-    else:
-        mortality_rates[0].append(values)
-print(mortality_rates[3])
+def mortality_rates(hurricanes):
+    mortality_scale = {0: 0, 1: 100, 2: 500, 3: 1000, 4: 10000}
+    mortality_rates = {0:[], 1:[], 2:[], 3:[], 4:[]}
+    for keys,values in hurricanes.items():
+        current_deaths = values['Death']
+        current_cane = values
+        if current_deaths > 10000:
+            mortality_rates[4].append(values)
+        elif current_deaths > 1000:
+            mortality_rates[3].append(values)
+        elif current_deaths > 500:
+            mortality_rates[2].append(values)
+        elif current_deaths > 100:
+            mortality_rates[1].append(values)
+        else:
+            mortality_rates[0].append(values)
+    return mortality_rates
 
 # write your greatest damage function here:
-most_damage = 0
-for i in range(len(updated_damages)):
-    if type(updated_damages[i]) is str:
-        continue
-    elif updated_damages[i] > most_damage:
-        most_damage = updated_damages[i]
-        most_damage_hurricane = {}
-        most_damage_hurricane[names[i]] = updated_damages[i]
-    else:
-        continue
-print(most_damage_hurricane)
+def most_damage_hurricane(updated_damages, names):
+    most_damage = 0
+    for i in range(len(updated_damages)):
+        if type(updated_damages[i]) is str:
+            continue
+        elif updated_damages[i] > most_damage:
+            most_damage = updated_damages[i]
+            most_damage_hurricane = {}
+            most_damage_hurricane[names[i]] = updated_damages[i]
+        else:
+            continue
+    return most_damage_hurricane
 
 # write your catgeorize by damage function here:
-damage_scale = {0: 0, 1: 100000000, 2: 1000000000, 3: 10000000000, 4: 50000000000}
-damage_ratings = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[]}
-for keys,values in hurricanes.items():
-    current_damages = values['Damage']
-    current_cane = values
-    if type(current_damages) is str:
-        damage_ratings[0].append(values)
-    else:
-        current_damages = float(values['Damage'])
-        if current_damages > 50000000000:
-            damage_ratings[5].append(values)
-        elif current_damages > 10000000000:
-            damage_ratings[4].append(values)
-        elif current_damages > 1000000000:
-            damage_ratings[3].append(values)
-        elif current_damages > 100000000:
-            damage_ratings[2].append(values)
+def damage_ratings(hurricanes):
+    damage_scale = {0: 0, 1: 100000000, 2: 1000000000, 3: 10000000000, 4: 50000000000}
+    damage_ratings = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[]}
+    for keys,values in hurricanes.items():
+        current_damages = values['Damage']
+        current_cane = values
+        if type(current_damages) is str:
+            damage_ratings[0].append(values)
         else:
-            damage_ratings[1].append(values)
-print(damage_ratings[0])
+            current_damages = float(values['Damage'])
+            if current_damages > 50000000000:
+                damage_ratings[5].append(values)
+            elif current_damages > 10000000000:
+                damage_ratings[4].append(values)
+            elif current_damages > 1000000000:
+                damage_ratings[3].append(values)
+            elif current_damages > 100000000:
+                damage_ratings[2].append(values)
+            else:
+                damage_ratings[1].append(values)
+    return damage_ratings
